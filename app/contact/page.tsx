@@ -1,44 +1,11 @@
 "use client"
 import React, { useState } from 'react';
-import { MessageCircle, Send, Zap, Clock, Shield, Headphones, ArrowRight, Phone, Mail, MapPin } from 'lucide-react';
+import { MessageCircle, Send, Zap, Clock, Shield, Headphones, ArrowRight, Mail, MapPin } from 'lucide-react';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 
-// SEO-optimized metadata
- const metadata = {
-  title: 'Contact Open Mail - 24/7 Support for Temporary Email Service | Free Disposable Email',
-  description: 'Get instant support for Open Mail temporary email service. Contact us via WhatsApp for fast help with disposable emails, temp mail issues, and anonymous email solutions. Available 24/7.',
-  keywords: 'contact open mail, temp mail support, temporary email help, disposable email service, anonymous email support, fake email generator contact, 10 minute mail alternative',
-  openGraph: {
-    title: 'Contact Open Mail - 24/7 Temporary Email Support',
-    description: 'Need help with temporary emails? Contact Open Mail support team via WhatsApp for instant assistance with disposable email services.',
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'Open Mail - Temporary Email Service',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Contact Open Mail - Temp Mail Support',
-    description: 'Get instant support for temporary email services. Available 24/7 via WhatsApp.',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: 'https://openmail.com/contact',
-  },
-};
-
 export default function ContactSection() {
-  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -56,7 +23,7 @@ export default function ContactSection() {
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -169,7 +136,7 @@ export default function ContactSection() {
         <meta name="rating" content="General" />
         <meta name="distribution" content="Global" />
         
-        {/* Structured Data */}
+        {/* Structured_elapsedTime */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -215,7 +182,7 @@ export default function ContactSection() {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Got questions about disposable emails? Need support with Open Mail temp mail service? Or having issues with anonymous email generation? We're here to help! 
+                Got questions about disposable emails? Need support with Open Mail temp mail service? Or having issues with anonymous email generation? We\'re here to help! 
                 Reach out via WhatsApp for instant temporary email support or use any contact method below.
               </p>
             </header>
@@ -237,7 +204,7 @@ export default function ContactSection() {
                     </div>
                     <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
                     <p className="text-gray-400">{feature.description}</p>
-                  </div>
+                    </div>
                 </article>
               ))}
             </section>
@@ -316,7 +283,7 @@ export default function ContactSection() {
                   </div>
                   
                   <p className="text-gray-400 mb-6">
-                    Fill out the form below and we'll redirect you to WhatsApp with your temporary email support message ready to send!
+                    Fill out the form below and we\'ll redirect you to WhatsApp with your temporary email support message ready to send!
                   </p>
                   
                   <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleWhatsAppRedirect(); }}>
@@ -343,7 +310,7 @@ export default function ContactSection() {
                         placeholder="Your Email (Optional)"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-400/50 focus:bg-white/10 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/ Slater-10 rounded-x1 text-white placeholder-gray-400 focus:outline-none focus:border-green-400/50 focus:bg-white/10 transition-all duration-300"
                         autoComplete="email"
                       />
                     </div>

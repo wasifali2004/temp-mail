@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
@@ -29,7 +30,7 @@ export default function Navbar() {
       e.preventDefault();
       const targetElement = document.querySelector(href);
       if (targetElement) {
-        const headerOffset = 80; // Account for fixed navbar height
+        const headerOffset = 80;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -45,7 +46,7 @@ export default function Navbar() {
     e.preventDefault();
     const targetElement = document.querySelector('#main-section');
     if (targetElement) {
-      const headerOffset = 80; // Account for fixed navbar height
+      const headerOffset = 80;
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -64,16 +65,17 @@ export default function Navbar() {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
           <div className="flex-shrink-0 group">
             <Link href="/" className="flex items-center space-x-2">
               <div className="relative">
                 <div className={`w-12 h-12 rounded-xl transition-all duration-300 ${
                   scrolled ? 'bg-white/10 backdrop-blur-sm' : 'bg-white/10'
                 } backdrop-blur-sm group-hover:scale-110 group-hover:rotate-3`}>
-                  <img 
+                  <Image 
                     src="/logo3.png" 
                     alt="Logo" 
+                    width={48}
+                    height={48}
                     className="w-full h-full object-contain p-2"
                   />
                 </div>
@@ -87,7 +89,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-1">
               {navItems.map((item, index) => (
@@ -114,7 +115,6 @@ export default function Navbar() {
                 </Link>
               ))}
               
-              {/* CTA Button */}
               <div className="ml-6">
                 <button
                   onClick={handleGetStartedClick}
@@ -128,7 +128,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -150,7 +149,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
         <div className={`md:hidden transition-all duration-300 ease-in-out ${
           isOpen 
             ? 'max-h-96 opacity-100' 

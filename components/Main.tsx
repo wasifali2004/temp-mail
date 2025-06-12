@@ -48,6 +48,19 @@ interface AccountData {
   password: string;
 }
 
+interface ApiResponse {
+  [key: string]: unknown;
+}
+
+interface Domain {
+  isActive: boolean;
+  domain: string;
+}
+
+interface LoginResponse {
+  token: string;
+}
+
 // Mail.tm API base URL
 const API_BASE = 'https://api.mail.tm';
 
@@ -75,7 +88,7 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
 };
 
 // --- Main Application Component ---
-export default function App(): JSX.Element {
+export default function App(): React.ReactNode {
   const [address, setAddress] = useState<string>('');
   const [messages, setMessages] = useState<EmailMessage[]>([]);
   const [otp, setOtp] = useState<string>('');
@@ -115,15 +128,18 @@ export default function App(): JSX.Element {
   }, []);
 
   // --- Function to make API calls with rate limiting and retry logic ---
-  const apiCall = useCallback(async (endpoint: string, options: RequestInit = {}, retryCount = 0) => {
+  const apiCall = useCallback(async (endpoint: string, options: RequestInit = {}, retryCount = 0): Promise<ApiResponse> => {
     const url = `${API_BASE}${endpoint}`;
     console.log(`Making API call to: ${url} (attempt ${retryCount + 1})`);
 
-    const headers = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      ...options.headers,
     };
+
+    if (options.headers) {
+      Object.assign(headers, options.headers as Record<string, string>);
+    }
 
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
@@ -169,9 +185,9 @@ export default function App(): JSX.Element {
       const data = await response.json();
       console.log('API Response Data:', data);
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('API Call Error:', error);
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      if (error instanceof Error && error.name === 'TypeError' && error.message.includes('fetch')) {
         throw new Error('Network error - please check your internet connection or try again later');
       }
       throw error;
@@ -179,7 +195,7 @@ export default function App(): JSX.Element {
   }, [authToken]);
 
   // --- Function to create account ---
-  const createAccount = useCallback(async (email: string, password: string) => {
+  const createAccount = useCallback(async (email: string, password: string): Promise<ApiResponse> => {
     try {
       const account = await apiCall('/accounts', {
         method: 'POST',
@@ -189,13 +205,13 @@ export default function App(): JSX.Element {
         }),
       });
       return account;
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   }, [apiCall]);
 
   // --- Function to login ---
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string): Promise<LoginResponse> => {
     try {
       const response = await apiCall('/token', {
         method: 'POST',
@@ -204,8 +220,11 @@ export default function App(): JSX.Element {
           password: password,
         }),
       });
-      return response;
-    } catch (error: any) {
+      if (!response.token) {
+        throw new Error('Invalid login response: token missing');
+      }
+      return response as unknown as LoginResponse;
+    } catch (error: unknown) {
       throw error;
     }
   }, [apiCall]);
@@ -220,11 +239,11 @@ export default function App(): JSX.Element {
       let messageList: EmailMessage[] = [];
 
       if (Array.isArray(response)) {
-        messageList = response;
+        messageList = response as EmailMessage[];
       } else if (response && response['hydra:member']) {
-        messageList = response['hydra:member'];
+        messageList = response['hydra:member'] as EmailMessage[];
       } else if (response && response.messages) {
-        messageList = response.messages;
+        messageList = response.messages as EmailMessage[];
       }
 
       setMessages(messageList);
@@ -238,13 +257,13 @@ export default function App(): JSX.Element {
           break;
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       showToast('Failed to fetch messages', 'error');
     }
   }, [authToken, accountCredentials, apiCall, extractOTP, otp, showToast]);
 
   // --- Function to cleanup previous session ---
-  const cleanupSession = useCallback(() => {
+  const cleanupSession = useCallback((): void => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -259,7 +278,7 @@ export default function App(): JSX.Element {
   }, []);
 
   // --- Function to start polling for messages with longer intervals ---
-  const startPolling = useCallback(() => {
+  const startPolling = useCallback((): void => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -270,7 +289,7 @@ export default function App(): JSX.Element {
 
     intervalRef.current = setInterval(() => {
       fetchMessages();
-    }, 1000); // Updated to 1 second based on 8 QPS limit
+    }, 1000);
   }, [fetchMessages]);
 
   // --- Function to generate random string ---
@@ -293,8 +312,15 @@ export default function App(): JSX.Element {
     showToast("Creating new temporary email account...", 'info');
 
     try {
-      const domainList = await apiCall('/domains');
+      const domainResponse = await apiCall('/domains');
+      const domainList = domainResponse as unknown as Domain[];
+      if (!Array.isArray(domainList)) {
+        throw new Error('Invalid domain response: expected an array');
+      }
       const domain = domainList.find(d => d.isActive) || domainList[0];
+      if (!domain) {
+        throw new Error('No active domains available');
+      }
       const username = generateRandomString(10);
       const email = `${username}@${domain.domain}`;
       const password = generateRandomString(12);
@@ -315,8 +341,8 @@ export default function App(): JSX.Element {
       await fetchMessages();
       startPolling();
       showToast("📡 Inbox is live! Waiting for messages...", 'success');
-    } catch (error: any) {
-      showToast(error.message || "Failed to create email account", 'error');
+    } catch (error: unknown) {
+      showToast(error instanceof Error ? error.message : "Failed to create email account", 'error');
       cleanupSession();
     } finally {
       setLoading(false);
@@ -331,7 +357,23 @@ export default function App(): JSX.Element {
     showToast("🔄 Refreshing inbox...", 'info');
     await fetchMessages();
     showToast("✅ Inbox refreshed", 'success');
-  }, [fetchMessages, loading, accountCredentials, authToken]);
+  }, [fetchMessages, loading, accountCredentials, authToken, showToast]);
+
+  // --- Fallback copy function ---
+  const fallbackCopyTextToClipboard = useCallback((text: string, successMessage: string): void => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showToast(successMessage, 'success');
+    } catch {
+      showToast("Failed to copy", 'error');
+    }
+    document.body.removeChild(textArea);
+  }, [showToast]);
 
   // --- Function to copy text to clipboard ---
   const copyToClipboard = useCallback((textToCopy: string, successMessage: string): void => {
@@ -349,23 +391,7 @@ export default function App(): JSX.Element {
     } else {
       fallbackCopyTextToClipboard(textToCopy, successMessage);
     }
-  }, [showToast]);
-
-  // Fallback copy function
-  const fallbackCopyTextToClipboard = (text: string, successMessage: string): void => {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      document.execCommand('copy');
-      showToast(successMessage, 'success');
-    } catch (err) {
-      showToast("Failed to copy", 'error');
-    }
-    document.body.removeChild(textArea);
-  };
+  }, [showToast, fallbackCopyTextToClipboard]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -378,11 +404,11 @@ export default function App(): JSX.Element {
     <div className="min-h-screen bg-gray-900 text-white font-sans">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
-      <div className="container mx-auto p-4 max-w-4xl mt-20"> {/* Added mt-10 for margin-top */}
+      <div className="container mx-auto p-4 max-w-4xl mt-20">
         {/* Header */}
         <header className="text-center py-8">
           <div className="inline-flex items-center gap-3 mb-3">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent ">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Open Mail
             </h1>
           </div>
@@ -413,7 +439,7 @@ export default function App(): JSX.Element {
                 <button
                   onClick={() => copyToClipboard(address, "📧 Email address copied!")}
                   disabled={!address || loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer" // Added cursor-pointer
+                  className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <Copy className="w-5 h-5" />
                   Copy Email
@@ -422,7 +448,7 @@ export default function App(): JSX.Element {
                 <button
                   onClick={generateNewEmail}
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-cyan-500/20 disabled:cursor-not-allowed cursor-pointer" // Added cursor-pointer
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-cyan-500/20 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
                   {loading ? "Creating..." : "Generate New Email"}
@@ -431,7 +457,7 @@ export default function App(): JSX.Element {
                 <button
                   onClick={refreshMessages}
                   disabled={!address || loading || !accountCredentials}
-                  className="flex items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer" // Added cursor-pointer
+                  className="flex items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Refresh
@@ -454,7 +480,7 @@ export default function App(): JSX.Element {
                   </div>
                   <button
                     onClick={() => copyToClipboard(otp, "🔐 OTP code copied!")}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer" // Added cursor-pointer
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <Copy className="w-4 h-4" />
                     Copy Code
