@@ -1,0 +1,582 @@
+.container {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.gradientBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, #1a1a2e 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, #16213e 0%, transparent 50%),
+              radial-gradient(circle at 40% 80%, #0f3460 0%, transparent 50%);
+  z-index: -1;
+}
+
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  animation: slideDown 0.8s ease-out;
+}
+
+.title {
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #00f5ff 0%, #0080ff 50%, #8000ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.mainSection {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 3rem;
+  backdrop-filter: blur(20px);
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.mainSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.5), transparent);
+}
+
+.emailDisplayContainer {
+  margin-bottom: 2rem;
+}
+
+.emailDisplay {
+  background: #111111;
+  border: 2px solid #222;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emailDisplay.active {
+  border-color: #00f5ff;
+  background: rgba(0, 245, 255, 0.05);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.1);
+}
+
+.emailText {
+  font-size: 1.1rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  color: #ffffff;
+  word-break: break-all;
+  flex: 1;
+}
+
+.emailText.placeholder {
+  color: #666;
+  font-family: inherit;
+  font-style: italic;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.emailDisplay.active .actionButtons {
+  opacity: 1;
+}
+
+.btnIcon {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.btnIcon:hover {
+  background: rgba(0, 245, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.emailGenerator {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.generateBtn {
+  background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+  border: none;
+  padding: 1.2rem 3rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  min-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.generateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 245, 255, 0.4);
+}
+
+.generateBtn:active {
+  transform: translateY(0);
+}
+
+.generateBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.generateBtn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  transform: translate(-50%, -50%);
+}
+
+.generateBtn:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.loadingSpinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+}
+
+.otpSection {
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.otpSection.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  max-height: 200px;
+}
+
+.otpCard {
+  background: linear-gradient(135deg, #ff6b6b, #ffa500);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.otpCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s linear infinite;
+}
+
+.otpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.otpIcon {
+  font-size: 1.5rem;
+}
+
+.otpTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.otpCode {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.3rem;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.otpCode:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.otpSubtext {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.9rem;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.inboxSection {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.inboxSection.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.inboxHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inboxTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.inboxStats {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.refreshBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.refreshBtn:hover {
+  border-color: #00f5ff;
+  background: rgba(0, 245, 255, 0.1);
+}
+
+.emailList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.emailItem {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  animation: slideInLeft 0.5s ease-out both;
+}
+
+.emailItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 245, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.emailItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(135deg, #00f5ff, #0080ff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.emailItem:hover::before {
+  opacity: 1;
+}
+
+.emailMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.8rem;
+}
+
+.emailFrom {
+  font-weight: 600;
+  color: #00f5ff;
+  font-size: 0.9rem;
+}
+
+.emailTime {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.emailSubject {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.emailPreview {
+  color: #aaa;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.otpHighlight {
+  background: linear-gradient(135deg, #ff6b6b, #ffa500);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.otpLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+  color: #000;
+}
+
+.otpCodeSmall {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.otpCodeSmall:hover {
+  transform: scale(1.05);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    padding: 2rem 1rem;
+  }
+
+  .mainSection {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .generateBtn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .emailDisplay {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .actionButtons {
+    opacity: 1;
+    justify-content: center;
+  }
+
+  .inboxHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .refreshBtn {
+    align-self: center;
+  }
+
+  .emailMeta {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .otpCode {
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .mainSection {
+    padding: 1.5rem;
+  }
+
+  .otpCode {
+    font-size: 1.8rem;
+    letter-spacing: 0.15rem;
+  }
+
+  .otpCodeSmall {
+    font-size: 1.2rem;
+    letter-spacing: 0.15rem;
+  }
+}
