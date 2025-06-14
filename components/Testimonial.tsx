@@ -1,7 +1,6 @@
 "use client"
-
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Quote, Star, Mail, Shield, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,7 +36,7 @@ export default function Testimonials() {
       role: "Privacy Consultant",
       company: "SecureWeb Co",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content: "Excellent privacy protection! No registration needed and emails auto-delete. It's become essential for my online privacy toolkit.",
+      content: "Excellent privacy protection! No registration needed and emails auto-delete. It&apos;s become essential for my online privacy toolkit.",
       rating: 5,
       featured: false
     },
@@ -158,7 +157,7 @@ export default function Testimonials() {
         <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-indigo-300/15 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
       </div>
-
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className={`text-center mb-16 transition-all duration-1000 transform ${
@@ -193,12 +192,12 @@ export default function Testimonials() {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 animate-pulse"></div>
               <div className="absolute -top-6 -left-6 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-30 animate-bounce"></div>
               <div className="absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-30 animate-bounce" style={{ animationDelay: '1s' }}></div>
-
+              
               {/* Floating Quote Icon */}
               <div className="absolute top-6 right-6 opacity-10 animate-pulse">
                 <Quote className="w-20 h-20 text-blue-600" />
               </div>
-
+              
               {/* Content */}
               <div className={`relative z-10 transition-all duration-300 ${
                 isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
@@ -209,14 +208,14 @@ export default function Testimonials() {
                     {renderStars(testimonials[currentIndex].rating)}
                   </div>
                 </div>
-
+                
                 {/* Testimonial Text */}
                 <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 text-center mb-10 leading-relaxed">
-                  <span className="text-4xl text-blue-500 font-serif leading-none">"</span>
+                  <span className="text-4xl text-blue-500 font-serif leading-none">&ldquo;</span>
                   {testimonials[currentIndex].content}
-                  <span className="text-4xl text-blue-500 font-serif leading-none">"</span>
+                  <span className="text-4xl text-blue-500 font-serif leading-none">&rdquo;</span>
                 </blockquote>
-
+                
                 {/* Author Info */}
                 <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
                   <div className="relative group">
@@ -251,7 +250,7 @@ export default function Testimonials() {
             >
               <ChevronLeft className="w-6 h-6 text-white group-hover:text-blue-200 transition-colors transform group-hover:scale-110" />
             </button>
-
+            
             {/* Enhanced Dots */}
             <div className="flex space-x-3">
               {testimonials.map((_, index) => (
@@ -267,7 +266,7 @@ export default function Testimonials() {
                 />
               ))}
             </div>
-
+            
             <button
               onClick={nextTestimonial}
               className="group p-4 rounded-full bg-white/20 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-110 border border-white/30 hover:bg-white/30"
@@ -276,7 +275,7 @@ export default function Testimonials() {
               <ChevronRight className="w-6 h-6 text-white group-hover:text-blue-200 transition-colors transform group-hover:scale-110" />
             </button>
           </div>
-
+          
           {/* Auto-play indicator */}
           <div className="flex items-center justify-center mt-6">
             <div className={`text-sm text-white/70 flex items-center space-x-2 transition-opacity duration-300 ${

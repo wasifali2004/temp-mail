@@ -136,7 +136,7 @@ export default function ContactSection() {
         <meta name="rating" content="General" />
         <meta name="distribution" content="Global" />
         
-        {/* Structured_elapsedTime */}
+        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -182,7 +182,7 @@ export default function ContactSection() {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Got questions about disposable emails? Need support with Open Mail temp mail service? Or having issues with anonymous email generation? We\'re here to help! 
+                Got questions about disposable emails? Need support with Open Mail temp mail service? Or having issues with anonymous email generation? We&apos;re here to help! 
                 Reach out via WhatsApp for instant temporary email support or use any contact method below.
               </p>
             </header>
@@ -283,7 +283,7 @@ export default function ContactSection() {
                   </div>
                   
                   <p className="text-gray-400 mb-6">
-                    Fill out the form below and we\'ll redirect you to WhatsApp with your temporary email support message ready to send!
+                    Fill out the form below and we&apos;ll redirect you to WhatsApp with your temporary email support message ready to send!
                   </p>
                   
                   <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleWhatsAppRedirect(); }}>
@@ -310,7 +310,7 @@ export default function ContactSection() {
                         placeholder="Your Email (Optional)"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/ Slater-10 rounded-x1 text-white placeholder-gray-400 focus:outline-none focus:border-green-400/50 focus:bg-white/10 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-400/50 focus:bg-white/10 transition-all duration-300"
                         autoComplete="email"
                       />
                     </div>

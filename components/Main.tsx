@@ -185,12 +185,12 @@ export default function App(): React.ReactNode {
       const data = await response.json();
       console.log('API Response Data:', data);
       return data;
-    } catch (error: unknown) {
-      console.error('API Call Error:', error);
-      if (error instanceof Error && error.name === 'TypeError' && error.message.includes('fetch')) {
+    } catch (apiError: unknown) {
+      console.error('API Call Error:', apiError);
+      if (apiError instanceof Error && apiError.name === 'TypeError' && apiError.message.includes('fetch')) {
         throw new Error('Network error - please check your internet connection or try again later');
       }
-      throw error;
+      throw apiError;
     }
   }, [authToken]);
 
@@ -205,8 +205,8 @@ export default function App(): React.ReactNode {
         }),
       });
       return account;
-    } catch (error: unknown) {
-      throw error;
+    } catch (createError: unknown) {
+      throw createError;
     }
   }, [apiCall]);
 
@@ -224,8 +224,8 @@ export default function App(): React.ReactNode {
         throw new Error('Invalid login response: token missing');
       }
       return response as unknown as LoginResponse;
-    } catch (error: unknown) {
-      throw error;
+    } catch (loginError: unknown) {
+      throw loginError;
     }
   }, [apiCall]);
 
@@ -257,7 +257,8 @@ export default function App(): React.ReactNode {
           break;
         }
       }
-    } catch (error: unknown) {
+    } catch (fetchError: unknown) {
+      console.error('Fetch messages error:', fetchError);
       showToast('Failed to fetch messages', 'error');
     }
   }, [authToken, accountCredentials, apiCall, extractOTP, otp, showToast]);
@@ -341,8 +342,8 @@ export default function App(): React.ReactNode {
       await fetchMessages();
       startPolling();
       showToast("📡 Inbox is live! Waiting for messages...", 'success');
-    } catch (error: unknown) {
-      showToast(error instanceof Error ? error.message : "Failed to create email account", 'error');
+    } catch (generateError: unknown) {
+      showToast(generateError instanceof Error ? generateError.message : "Failed to create email account", 'error');
       cleanupSession();
     } finally {
       setLoading(false);

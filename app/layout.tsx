@@ -138,6 +138,7 @@ export default function RootLayout({
         />
 
         <script
+          id="structured-data"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -194,11 +195,14 @@ export default function RootLayout({
           data-full-width-responsive="true"
         ></ins>
         <Script
+          id="adsense-script-1"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
           crossOrigin="anonymous"
         />
-        <Script>{`(adsbygoogle = window.adsbygoogle || []).push({});`}</Script>
+        <Script id="adsense-init-1">
+          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+        </Script>
 
         <ins
           className="adsbygoogle"
@@ -208,12 +212,15 @@ export default function RootLayout({
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <script
+        <Script
+          id="adsense-script-2"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
           crossOrigin="anonymous"
-        ></script>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        />
+        <Script id="adsense-init-2">
+          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+        </Script>
 
         <ins
           className="adsbygoogle"
@@ -223,26 +230,32 @@ export default function RootLayout({
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <script
+        <Script
+          id="adsense-script-3"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
           crossOrigin="anonymous"
-        ></script>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        />
+        <Script id="adsense-init-3">
+          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+        </Script>
 
         <Script
+          id="eventsource-script"
           src="https://cdn.jsdelivr.net/gh/cemalgnlts/Mailjs@3.0.0/eventsource.min.js"
           strategy="afterInteractive"
           integrity="sha384-YOUR_SRI_HASH_EVENTSOURCE" // Replace with actual SRI hash
           crossOrigin="anonymous"
         />
         <Script
+          id="mailjs-script"
           src="https://cdn.jsdelivr.net/npm/@cemalgnlts/mailjs@3.0.0/dist/mailjs.min.js"
           strategy="afterInteractive"
           integrity="sha384-YOUR_SRI_HASH_MAILJS" // Replace with actual SRI hash
           crossOrigin="anonymous"
         />
         <Script
+          id="gtag-script"
           src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_TRACKING_ID" // Replace with your Google Analytics tracking ID
           strategy="afterInteractive"
         />

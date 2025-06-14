@@ -187,8 +187,8 @@ export default function AboutSection() {
             
             <div className="max-w-4xl mx-auto">
               <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                At Open Mail, your privacy isn't just a feature—it's our foundation. Our disposable email service 
-                doesn't store, track, or monetize your data. Every temporary email is automatically purged, leaving no digital 
+                At Open Mail, your privacy isn&apos;t just a feature—it&apos;s our foundation. Our disposable email service 
+                doesn&apos;t store, track, or monetize your data. Every temporary email is automatically purged, leaving no digital 
                 footprint behind. Experience the most secure temp mail generator with complete anonymity protection.
               </p>
               
