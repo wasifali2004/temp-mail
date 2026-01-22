@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Mail, Shield, Clock, Zap, Heart, Star } from 'lucide-react';
 
-export default function Footer() {
+const Footer = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Footer() {
   return (
     <footer 
       id="footer"
-      className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden"
+      className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden -mt-8"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 opacity-20">
@@ -88,7 +88,7 @@ export default function Footer() {
             {/* Brand Name */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                Open Mail
+                TempMailCo
               </span>
             </h2>
 
@@ -177,7 +177,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-blue-200 text-sm">
-              © 2025 Open Mail. Protecting your privacy, one email at a time.
+              © 2025 TempMailco . Protecting your privacy, one email at a time.
             </div>
 
             {/* Made with Love */}
@@ -189,9 +189,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
     </footer>
   );
 }
+
+export default Footer;

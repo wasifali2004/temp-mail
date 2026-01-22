@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
-
+import Image from 'next/image';
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -147,11 +147,11 @@ export default function Testimonials() {
   return (
     <section 
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-purple-600 via-blue-300 to-indigo-500 relative overflow-hidden"
+      className="py-20 bg-gradient-to-br from-purple-600 via-blue-300 to-indigo-500 relative overflow-hidden -mt-8"
       id="testimonials"
     >
       {/* Enhanced Background Elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 ">
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
         <div className="absolute top-40 right-10 w-96 h-96 bg-cyan-300/20 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-indigo-300/15 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
@@ -220,7 +220,7 @@ export default function Testimonials() {
                 <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
                   <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                    <img
+                    <Image
                       src={testimonials[currentIndex].image}
                       alt={testimonials[currentIndex].name}
                       className="relative w-20 h-20 rounded-full object-cover shadow-xl transform group-hover:scale-105 transition-all duration-300"

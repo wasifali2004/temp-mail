@@ -17,7 +17,7 @@ export default function ContactSection() {
   const handleWhatsAppRedirect = () => {
     const message = formData.name && formData.message 
       ? `Hi! I'm ${formData.name}. ${formData.message}`
-      : "Hi! I have a question about Open Mail temporary email service.";
+      : "Hi! I have a question about tempmailco temporary email service.";
     
     const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -65,7 +65,7 @@ export default function ContactSection() {
       icon: <Mail className="w-8 h-8" />,
       title: "Email Support",
       subtitle: "For detailed temporary email inquiries",
-      detail: "support@openmail.com",
+      detail: "support@tempmailco.com",
       action: () => window.location.href = "mailto:wasifali16103@gmail.com",
       color: "from-blue-500 to-indigo-600"
     },
@@ -75,14 +75,14 @@ export default function ContactSection() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "name": "Contact Open Mail - Temporary Email Support",
-    "description": "Contact page for Open Mail temporary email service support",
-    "url": "https://openmail.com/contact",
+    "name": "Contact tempmailco - Temporary Email Support",
+    "description": "Contact page for tempmailco temporary email service support",
+    "url": "https://tempmailco.com/contact",
     "mainEntity": {
       "@type": "Organization",
-      "name": "Open Mail",
+      "name": "tempmailco",
       "description": "Free temporary email service provider",
-      "url": "https://openmail.com",
+      "url": "https://tempmailco.com",
       "contactPoint": [
         {
           "@type": "ContactPoint",
@@ -93,7 +93,7 @@ export default function ContactSection() {
         },
         {
           "@type": "ContactPoint",
-          "email": "support@openmail.com",
+          "email": "support@tempmailco.com",
           "contactType": "customer service",
           "availableLanguage": "English",
           "areaServed": "Worldwide"
@@ -108,24 +108,24 @@ export default function ContactSection() {
   return (
     <>
       <Head>
-        <title>Contact Open Mail - 24/7 Support for Temporary Email Service | Free Disposable Email</title>
-        <meta name="description" content="Get instant support for Open Mail temporary email service. Contact us via WhatsApp for fast help with disposable emails, temp mail issues, and anonymous email solutions. Available 24/7." />
-        <meta name="keywords" content="contact open mail, temp mail support, temporary email help, disposable email service, anonymous email support, fake email generator contact, 10 minute mail alternative" />
-        <meta name="author" content="Open Mail Team" />
+        <title>Contact tempmailco - 24/7 Support for Temporary Email Service | Free Disposable Email</title>
+        <meta name="description" content="Get instant support for tempmailco temporary email service. Contact us via WhatsApp for fast help with disposable emails, temp mail issues, and anonymous email solutions. Available 24/7." />
+        <meta name="keywords" content="contact tempmailco, temp mail support, temporary email help, disposable email service, anonymous email support, fake email generator contact, 10 minute mail alternative" />
+        <meta name="author" content="tempmailco Team" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://openmail.com/contact" />
+        <link rel="canonical" href="https://tempmailco.com/contact" />
         
         {/* Open Graph tags */}
-        <meta property="og:title" content="Contact Open Mail - 24/7 Temporary Email Support" />
-        <meta property="og:description" content="Need help with temporary emails? Contact Open Mail support team via WhatsApp for instant assistance with disposable email services." />
+        <meta property="og:title" content="Contact tempmailco - 24/7 Temporary Email Support" />
+        <meta property="og:description" content="Need help with temporary emails? Contact tempmailco support team via WhatsApp for instant assistance with disposable email services." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://openmail.com/contact" />
-        <meta property="og:site_name" content="Open Mail - Temporary Email Service" />
+        <meta property="og:url" content="https://tempmailco.com/contact" />
+        <meta property="og:site_name" content="tempmailco - Temporary Email Service" />
         <meta property="og:locale" content="en_US" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Contact Open Mail - Temp Mail Support" />
+        <meta name="twitter:title" content="Contact tempmailco - Temp Mail Support" />
         <meta name="twitter:description" content="Get instant support for temporary email services. Available 24/7 via WhatsApp." />
         
         {/* Additional SEO tags */}
@@ -182,14 +182,14 @@ export default function ContactSection() {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Got questions about disposable emails? Need support with Open Mail temp mail service? Or having issues with anonymous email generation? We&apos;re here to help! 
+                Got questions about disposable emails? Need support with tempmailco temp mail service? Or having issues with anonymous email generation? We&apos;re here to help! 
                 Reach out via WhatsApp for instant temporary email support or use any contact method below.
               </p>
             </header>
 
             {/* Support Features with SEO keywords */}
             <section className="grid md:grid-cols-3 gap-8 mb-16" aria-labelledby="support-features">
-              <h2 id="support-features" className="sr-only">Open Mail Support Features</h2>
+              <h2 id="support-features" className="sr-only">tempmailco Support Features</h2>
               {supportFeatures.map((feature, index) => (
                 <article
                   key={feature.title}
@@ -214,7 +214,7 @@ export default function ContactSection() {
               <section className="space-y-6" aria-labelledby="contact-methods">
                 <h2 id="contact-methods" className="text-3xl font-bold text-white mb-8 flex items-center">
                   <Headphones className="w-8 h-8 mr-3 text-green-400" />
-                  Contact Open Mail Support Team
+                  Contact tempmailco Support Team
                 </h2>
                 
                 {contactMethods.map((method, index) => (
@@ -351,7 +351,7 @@ export default function ContactSection() {
               <article className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                 <div className="flex items-center mb-4">
                   <MapPin className="w-6 h-6 text-blue-400 mr-3" aria-hidden="true" />
-                  <h3 className="text-lg font-bold text-white">Open Mail Service Location</h3>
+                  <h3 className="text-lg font-bold text-white">tempmailco Service Location</h3>
                 </div>
                 <p className="text-gray-400">
                   Pakistan (Serving worldwide temporary email users)
@@ -378,18 +378,18 @@ export default function ContactSection() {
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <article className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-lg font-bold text-white mb-3">How fast is Open Mail support response?</h3>
+                  <h3 className="text-lg font-bold text-white mb-3">How fast is tempmailco support response?</h3>
                   <p className="text-gray-400">We respond to WhatsApp messages within 5 minutes and emails within 2 hours for all temporary email service inquiries.</p>
                 </article>
                 
                 <article className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
                   <h3 className="text-lg font-bold text-white mb-3">What temp mail issues can you help with?</h3>
-                  <p className="text-gray-400">We help with disposable email problems, temporary email not receiving messages, anonymous email setup, and all Open Mail service issues.</p>
+                  <p className="text-gray-400">We help with disposable email problems, temporary email not receiving messages, anonymous email setup, and all tempmailco service issues.</p>
                 </article>
                 
                 <article className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-lg font-bold text-white mb-3">Is Open Mail temporary email service free?</h3>
-                  <p className="text-gray-400">Yes, Open Mail provides free disposable email addresses with no registration required. Contact us for premium features information.</p>
+                  <h3 className="text-lg font-bold text-white mb-3">Is tempmailco temporary email service free?</h3>
+                  <p className="text-gray-400">Yes, tempmailco provides free disposable email addresses with no registration required. Contact us for premium features information.</p>
                 </article>
                 
                 <article className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-6">

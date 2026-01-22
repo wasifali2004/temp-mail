@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Open Mail - Free Temporary Email Generator",
+  title: "tempmailco - Free Temporary Email Generator",
   description:
     "Generate instant temporary email addresses that auto-delete. Free disposable email service with no registration. Protect your privacy from spam with secure 10-minute mail generator.",
   keywords: [
@@ -28,10 +28,11 @@ export const metadata: Metadata = {
     "secure temporary email",
     "free disposable email",
     "temporary email for registration",
+    "tempmailco",
   ].join(", "),
-  authors: [{ name: "Open Mail Team" }],
-  creator: "Open Mail",
-  publisher: "Open Mail",
+  authors: [{ name: "tempmailco Team" }],
+  creator: "tempmailco",
+  publisher: "tempmailco",
   category: "Email Services",
   classification: "Temporary Email Generator",
   robots: {
@@ -48,18 +49,17 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://your-actual-domain.com", // Replace with your actual domain
+    canonical: "https://tempmailco.com",
   },
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE", // Replace with your Google Search Console code
-    yandex: "YOUR_YANDEX_VERIFICATION_CODE", // Replace with your Yandex Webmaster code
+    google: "googlee8fdf8c85f0b8a67",
+    yandex: "0b738cf82ce9a36f",
     other: {
-      "msvalidate.01": "YOUR_BING_VERIFICATION_CODE", // Replace with your Bing Webmaster code
+      "msvalidate.01": "0FE7B7A0DBD3EE68519290574A966E92",
     },
   },
   other: {
-    "google-adsense-account": process.env.GOOGLE_ADSENSE_ACCOUNT || "ca-pub-YOUR_ACTUAL_PUBLISHER_ID", // Fallback to placeholder if env not set
-    "application-name": "Open Mail",
+    "application-name": "tempmailco",
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
@@ -87,12 +87,17 @@ export default function RootLayout({
   return (
     <html lang="en-US">
       <head>
+        {/* CRITICAL: AdSense verification meta tag */}
+        <meta name="google-adsense-account" content="ca-pub-1125717518172617" />
+        
+        {/* Load AdSense script */}
         <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          strategy="lazyOnload"
-          data-ad-client={process.env.GOOGLE_ADSENSE_ACCOUNT || "ca-pub-YOUR_ACTUAL_PUBLISHER_ID"} // Fallback to placeholder if env not set
           async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -119,32 +124,33 @@ export default function RootLayout({
 
         <meta
           property="og:title"
-          content="Open Mail - Free Temporary Email Generator"
+          content="tempmailco - Free Temporary Email Generator"
         />
         <meta
           property="og:description"
           content="Generate instant temporary email addresses that auto-delete. Protect your privacy with our secure disposable email service."
         />
-        <meta property="og:url" content="https://your-actual-domain.com" />
+        <meta property="og:url" content="https://tempmailco.com" />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:site_name" content="tempmailco - Temporary Email Service" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Open Mail - Free Temporary Email Generator"
+          content="tempmailco - Free Temporary Email Generator"
         />
         <meta
           name="twitter:description"
           content="Generate instant temporary email addresses that auto-delete. Protect your privacy with our secure disposable email service."
         />
 
-        <script
+        <script 
           id="structured-data"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Open Mail",
+              name: "tempmailco",
               alternateName: [
                 "Temp Mail",
                 "Temporary Email",
@@ -153,7 +159,7 @@ export default function RootLayout({
               ],
               description:
                 "Free temporary email generator for creating disposable email addresses that auto-delete for privacy protection.",
-              url: "https://your-actual-domain.com",
+              url: "https://tempmailco.com",
               applicationCategory: "EmailApplication",
               operatingSystem: "Any",
               permissions: "none",
@@ -176,8 +182,15 @@ export default function RootLayout({
               softwareVersion: "1.0.0",
               releaseNotes:
                 "Initial release with temporary email generation, auto-delete functionality, and mobile support",
+              publisher: {
+                "@type": "Organization",
+                "name": "tempmailco",
+                "url": "https://tempmailco.com"
+              },
             }),
           }}
+
+          
         />
       </head>
 
@@ -186,77 +199,61 @@ export default function RootLayout({
       >
         {children}
 
+        {/* Ad Unit 1 */}
         <ins
           className="adsbygoogle"
           style={{ display: "block" }}
-          data-ad-client={process.env.GOOGLE_ADSENSE_ACCOUNT || "ca-pub-YOUR_ACTUAL_PUBLISHER_ID"} // Fallback to placeholder if env not set
+          data-ad-client="ca-pub-1125717518172617"
           data-ad-slot="5294812795"
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <Script
-          id="adsense-script-1"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
-          crossOrigin="anonymous"
-        />
-        <Script id="adsense-init-1">
-          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-        </Script>
 
+        {/* Ad Unit 2 */}
         <ins
           className="adsbygoogle"
           style={{ display: "block" }}
-          data-ad-client={process.env.GOOGLE_ADSENSE_ACCOUNT || "ca-pub-YOUR_ACTUAL_PUBLISHER_ID"} // Fallback to placeholder if env not set
+          data-ad-client="ca-pub-1125717518172617"
           data-ad-slot="7258631154"
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <Script
-          id="adsense-script-2"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
-          crossOrigin="anonymous"
-        />
-        <Script id="adsense-init-2">
-          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-        </Script>
 
+        {/* Ad Unit 3 */}
         <ins
           className="adsbygoogle"
           style={{ display: "block" }}
-          data-ad-client={process.env.GOOGLE_ADSENSE_ACCOUNT || "ca-pub-YOUR_ACTUAL_PUBLISHER_ID"} // Fallback to placeholder if env not set
+          data-ad-client="ca-pub-1125717518172617"
           data-ad-slot="9296238185"
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <Script
-          id="adsense-script-3"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
-          crossOrigin="anonymous"
-        />
-        <Script id="adsense-init-3">
-          {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+
+        {/* Initialize all ads */}
+        <Script id="adsense-init">
+          {`
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          `}
         </Script>
 
+        {/* Your other scripts */}
         <Script
           id="eventsource-script"
           src="https://cdn.jsdelivr.net/gh/cemalgnlts/Mailjs@3.0.0/eventsource.min.js"
           strategy="afterInteractive"
-          integrity="sha384-YOUR_SRI_HASH_EVENTSOURCE" // Replace with actual SRI hash
           crossOrigin="anonymous"
         />
         <Script
           id="mailjs-script"
           src="https://cdn.jsdelivr.net/npm/@cemalgnlts/mailjs@3.0.0/dist/mailjs.min.js"
           strategy="afterInteractive"
-          integrity="sha384-YOUR_SRI_HASH_MAILJS" // Replace with actual SRI hash
           crossOrigin="anonymous"
         />
         <Script
           id="gtag-script"
-          src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_TRACKING_ID" // Replace with your Google Analytics tracking ID
+          src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_TRACKING_ID"
           strategy="afterInteractive"
         />
       </body>

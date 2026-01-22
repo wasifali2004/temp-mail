@@ -63,8 +63,8 @@ export default function Navbar() {
         ? 'bg-transparent backdrop-blur-none' 
         : 'bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+        <div className="flex justify-between items-center h-20 mt-5">
           <div className="flex-shrink-0 group">
             <Link href="/" className="flex items-center space-x-2">
               <div className="relative">
@@ -84,7 +84,7 @@ export default function Navbar() {
               <span className={`text-xl font-bold transition-colors duration-300 ${
                 scrolled ? 'text-white' : 'text-white'
               }`}>
-                Open Mail
+                TempMailCo
               </span>
             </Link>
           </div>
