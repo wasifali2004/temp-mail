@@ -1,292 +1,166 @@
-"use client"
-import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
-import Image from 'next/image';
-export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const sectionRef = useRef(null);
+import { useState } from "react";
+import { ChevronRight, Twitter, Facebook, Mail } from "lucide-react";
 
-  const testimonials = [
+export default function TempMailBlog() {
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  const shareButtons = [
+    { name: "Twitter", Icon: Twitter, color: "bg-blue-400" },
+    { name: "Facebook", Icon: Facebook, color: "bg-blue-600" },
+    { name: "Email", Icon: Mail, color: "bg-yellow-400" }
+  ];
+
+  const relatedLinks = [
+    "Spam protection software", "10-minute mail", "Secure email application",
+    "Email", "Email privacy tools", "Email testing service", "Email verification tool",
+    "Two factor authentication methods", "Privacy focused search engines",
+    "Encrypted email service", "Temporary email service"
+  ];
+
+  const relatedTopics = [
+    "Temporary Email Inbox",
+    "Temporary Email with Password",
+    "Create Disposable Email Address",
+    "Free Disposable Email Address",
+    "Disposable Email Address"
+  ];
+
+  const faqs = [
     {
-      id: 1,
-      name: "Alex Rodriguez",
-      role: "Digital Marketing Specialist",
-      company: "TechFlow Agency",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      content: "Perfect for signing up to services without spam! I use it daily for client research and testing. Clean interface and instant email delivery.",
-      rating: 5,
-      featured: true
+      q: "What's a temp mail and how does it work?",
+      a: "Temp mail is a temporary email address that you can use for a short time. It works just like regular email but expires after some time."
     },
     {
-      id: 2,
-      name: "Sarah Chen",
-      role: "Software Developer",
-      company: "CodeCraft Solutions",
-      image: "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      content: "As a developer, I need temporary emails for testing user flows. This service is reliable, fast, and saves me tons of time.",
-      rating: 5,
-      featured: false
+      q: "Where can I use a temp mail?",
+      a: "You can use temp mail for website registrations, online services, downloading content, or anywhere you don't want to share your real email."
     },
     {
-      id: 3,
-      name: "Michael Thompson",
-      role: "Privacy Consultant",
-      company: "SecureWeb Co",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content: "Excellent privacy protection! No registration needed and emails auto-delete. It&apos;s become essential for my online privacy toolkit.",
-      rating: 5,
-      featured: false
+      q: "How to use disposable email?",
+      a: "Simply visit tempmailco, copy the generated email address, and use it wherever you need. All emails will appear on the page automatically."
     },
     {
-      id: 4,
-      name: "Emma Wilson",
-      role: "E-commerce Manager",
-      company: "ShopSmart Ltd",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content: "Great for testing checkout flows and email campaigns. The emails arrive instantly and the interface is super user-friendly.",
-      rating: 5,
-      featured: false
-    },
-    {
-      id: 5,
-      name: "David Park",
-      role: "Freelance Designer",
-      company: "Creative Studio",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      content: "No more cluttered inbox! I use this for all one-time signups and downloads. Simple, effective, and completely free.",
-      rating: 5,
-      featured: true
-    },
-    {
-      id: 6,
-      name: "Lisa Martinez",
-      role: "QA Engineer",
-      company: "TestPro Systems",
-      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
-      content: "Perfect for testing email functionality in our apps. Multiple domains available and emails load instantly. Highly recommended!",
-      rating: 5,
-      featured: false
+      q: "How long do we keep your mail messages?",
+      a: "Mail messages are kept from a few minutes up to a few days, depending on the service settings."
     }
   ];
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    
-    const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-        setIsTransitioning(false);
-      }, 150);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, testimonials.length]);
-
-  // Intersection Observer for animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const nextTestimonial = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-      setIsTransitioning(false);
-    }, 150);
-    setIsAutoPlaying(false);
-  };
-
-  const prevTestimonial = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-      setIsTransitioning(false);
-    }, 150);
-    setIsAutoPlaying(false);
-  };
-
-  const goToSlide = (index: number) => {
-    if (index === currentIndex) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex(index);
-      setIsTransitioning(false);
-    }, 150);
-    setIsAutoPlaying(false);
-  };
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-5 h-5 transition-all duration-300 ${
-          i < rating ? 'text-yellow-400 fill-current scale-110' : 'text-gray-400'
-        }`}
-      />
-    ));
-  };
+  const articles = [
+    { title: "3 simple tips to keep your email inbox from filling up with spam", icon: "👤" },
+    { title: "Where, who and how to use temp mail?", icon: "📧" },
+    { title: "Temporary Email or Disposable Email Service", icon: "📝" }
+  ];
 
   return (
-    <section 
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-purple-600 via-blue-300 to-indigo-500 relative overflow-hidden -mt-8"
-      id="testimonials"
-    >
-      {/* Enhanced Background Elements */}
-      <div className="absolute inset-0 ">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-96 h-96 bg-cyan-300/20 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-indigo-300/15 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+    <div className="bg-white">
+      {/* Share Buttons */}
+      <div className="flex justify-center gap-3 py-6">
+        {shareButtons.map((btn) => {
+          const IconComponent = btn.Icon;
+          return (
+            <button key={btn.name} className={`${btn.color} w-12 h-12 flex items-center justify-center text-white rounded hover:opacity-90 transition-opacity`}>
+              <IconComponent className="w-5 h-5" />
+            </button>
+          );
+        })}
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 transform ${
-          isVisible 
-            ? 'opacity-100 translate-y-0 scale-100' 
-            : 'opacity-0 translate-y-10 scale-95'
-        }`}>
-          <div className="inline-flex items-center justify-center p-3 bg-white/20 backdrop-blur-sm rounded-full mb-6 shadow-lg">
-            <Quote className="w-6 h-6 text-white" />
+
+      <div className="max-w-4xl mx-auto px-6 pb-12">
+        {/* Main Content */}
+        <h1 className="text-3xl font-bold mb-4">Why do we need a temp mail address?</h1>
+        
+        <p className="text-gray-700 mb-3 leading-relaxed">
+          Many websites ask for your email when you sign up or want to see special content. But some of these sites might send you unwanted emails or spam. <a href="#" className="text-blue-600">Spam protection software</a>
+        </p>
+
+        <p className="text-gray-700 mb-6 leading-relaxed">
+          The best solution is to use a temporary email address when you&apos;re not sure if a website can be trusted. This keeps your real inbox clean and protects your privacy.
+        </p>
+
+        {/* Discover More Links */}
+        <div className="mb-6">
+          <span className="text-gray-600 mr-3">Discover more</span>
+          <div className="inline-flex flex-wrap gap-2">
+            {relatedLinks.map((link, i) => (
+              <a key={i} href="#" className="text-blue-600 hover:underline">ⓘ {link}</a>
+            ))}
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Trusted by <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">Thousands</span>
-          </h2>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            See what developers, marketers, and privacy-conscious users say about our temporary email service.
-          </p>
         </div>
 
-        {/* Main Testimonial Display */}
-        <div className={`relative transition-all duration-1000 delay-300 transform ${
-          isVisible 
-            ? 'opacity-100 translate-y-0 scale-100' 
-            : 'opacity-0 translate-y-10 scale-95'
-        }`}>
-          <div className="max-w-4xl mx-auto">
-            <div className={`relative bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-white/20 overflow-hidden transition-all duration-300 transform ${
-              isTransitioning 
-                ? 'scale-95 opacity-80' 
-                : 'scale-100 opacity-100 hover:scale-[1.02] hover:shadow-3xl'
-            }`}>
-              {/* Animated decorative elements */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-purple-500 animate-pulse"></div>
-              <div className="absolute -top-6 -left-6 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-30 animate-bounce"></div>
-              <div className="absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-30 animate-bounce" style={{ animationDelay: '1s' }}></div>
-              
-              {/* Floating Quote Icon */}
-              <div className="absolute top-6 right-6 opacity-10 animate-pulse">
-                <Quote className="w-20 h-20 text-blue-600" />
-              </div>
-              
-              {/* Content */}
-              <div className={`relative z-10 transition-all duration-300 ${
-                isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-              }`}>
-                {/* Rating */}
-                <div className="flex items-center justify-center mb-8">
-                  <div className="flex space-x-1 p-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full">
-                    {renderStars(testimonials[currentIndex].rating)}
-                  </div>
-                </div>
-                
-                {/* Testimonial Text */}
-                <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 text-center mb-10 leading-relaxed">
-                  <span className="text-4xl text-blue-500 font-serif leading-none">&ldquo;</span>
-                  {testimonials[currentIndex].content}
-                  <span className="text-4xl text-blue-500 font-serif leading-none">&rdquo;</span>
-                </blockquote>
-                
-                {/* Author Info */}
-                <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
-                  <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                    <Image
-                      src={testimonials[currentIndex].image}
-                      alt={testimonials[currentIndex].name}
-                      className="relative w-20 h-20 rounded-full object-cover shadow-xl transform group-hover:scale-105 transition-all duration-300"
-                    />
-                    {testimonials[currentIndex].featured && (
-                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                        <Star className="w-4 h-4 text-white fill-current" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-center md:text-left">
-                    <h4 className="text-xl font-bold text-gray-900 mb-1">{testimonials[currentIndex].name}</h4>
-                    <p className="text-blue-600 font-semibold text-lg">{testimonials[currentIndex].role}</p>
-                    <p className="text-gray-600">{testimonials[currentIndex].company}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <p className="text-gray-700 mb-4 leading-relaxed">
+          Disposable mail (also called temp mail, temporary mail, or 10-minute mail) works like regular email but with a few differences:
+        </p>
 
-          {/* Enhanced Navigation */}
-          <div className="flex items-center justify-center mt-12 space-x-6">
-            <button
-              onClick={prevTestimonial}
-              className="group p-4 rounded-full bg-white/20 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-110 border border-white/30 hover:bg-white/30"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-6 h-6 text-white group-hover:text-blue-200 transition-colors transform group-hover:scale-110" />
-            </button>
-            
-            {/* Enhanced Dots */}
-            <div className="flex space-x-3">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`transition-all duration-300 transform hover:scale-125 ${
-                    index === currentIndex
-                      ? 'w-12 h-4 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full shadow-lg'
-                      : 'w-4 h-4 bg-white/40 hover:bg-white/60 rounded-full'
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
-            </div>
-            
-            <button
-              onClick={nextTestimonial}
-              className="group p-4 rounded-full bg-white/20 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-110 border border-white/30 hover:bg-white/30"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-6 h-6 text-white group-hover:text-blue-200 transition-colors transform group-hover:scale-110" />
-            </button>
-          </div>
-          
-          {/* Auto-play indicator */}
-          <div className="flex items-center justify-center mt-6">
-            <div className={`text-sm text-white/70 flex items-center space-x-2 transition-opacity duration-300 ${
-              isAutoPlaying ? 'opacity-100' : 'opacity-50'
-            }`}>
-              <div className="w-2 h-2 bg-white/60 rounded-full animate-pulse"></div>
-              <span>Auto-playing</span>
-            </div>
+        <ol className="list-decimal list-inside space-y-2 mb-6 text-gray-700">
+          <li>It only lasts for a short time - from a few minutes to a few days. (Tempmailco keeps old emails for up to 2 days)</li>
+          <li>You can only receive emails. You cannot send emails using a temp mail service.</li>
+          <li>Only text and HTML messages work. File attachments are blocked to keep you safe from dangerous files and viruses.</li>
+        </ol>
+
+        <h2 className="text-2xl font-bold mb-3">There are a few basic cases where you need temporary mail</h2>
+
+        <ul className="space-y-3 mb-6">
+          <li className="text-gray-700">
+            • Developers can test if email features work properly. With tempmailco, test emails are ready instantly. Our API will be available soon to make testing even easier.
+          </li>
+          <li className="text-gray-700">
+            • Keep your information safe from suspicious websites and protect your email from spam. Using temporary emails means you don&apos;t have to worry anymore. Privacy matters to everyone now. Temporary email addresses help protect you from risks.
+          </li>
+        </ul>
+
+        {/* Discover Related Topics */}
+        <div className="border border-gray-200 rounded mb-6">
+          <h3 className="text-lg font-semibold p-4 bg-gray-50">Discover related topics</h3>
+          <div className="divide-y divide-gray-200">
+            {relatedTopics.map((topic, i) => (
+              <a key={i} href="#" className="flex items-center justify-between p-4 hover:bg-gray-50">
+                <span className="text-gray-700">{topic}</span>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </a>
+            ))}
           </div>
         </div>
+
+        <ul className="space-y-2 mb-4 text-gray-700">
+          <li>• For websites that aren&apos;t important to you.</li>
+          <li>• Mailing lists or forums for getting subscription-only content.</li>
+          <li>• On websites you don&apos;t trust.</li>
+          <li>• Signing up for social media - Facebook, Instagram, Twitter, etc.</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+          <p className="text-blue-600 font-semibold">ⓘ Secure email application</p>
+          <p className="text-gray-600 mt-2">💡 <strong>Note:</strong> Never use disposable email for important things. It only lasts a short time and your email address is temporary.</p>
+        </div>
+
+        {/* FAQ Section */}
+        <h2 className="text-3xl font-bold mb-4">FAQ</h2>
+        <div className="divide-y divide-gray-200 border-t border-b border-gray-200 mb-8">
+          {faqs.map((faq, i) => (
+            <div key={i}>
+              <button onClick={() => setActiveFaq(activeFaq === i ? null : i)} className="w-full py-4 flex items-center justify-between text-left hover:bg-gray-50">
+                <span className="font-medium text-gray-800">{faq.q}</span>
+                <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${activeFaq === i ? "rotate-90" : ""}`} />
+              </button>
+              {activeFaq === i && (
+                <div className="pb-4 px-4 text-gray-600">{faq.a}</div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Articles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+          {articles.map((article, i) => (
+            <div key={i} className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-3xl">{article.icon}</span>
+              </div>
+              <div className="text-base font-medium mb-1">{i + 1}</div>
+              <h3 className="text-gray-800 text-sm">{article.title}</h3>
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

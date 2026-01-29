@@ -402,36 +402,36 @@ export default function App(): React.ReactNode {
   }, [cleanupSession]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white font-sans">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       <div className="container mx-auto p-4 max-w-4xl mt-20">
         {/* Header */}
         <header className="text-center py-8">
           <div className="inline-flex items-center gap-3 mb-3">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Open Mail
             </h1>
           </div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-500 text-lg">
             Generate free, disposable email addresses with automatic OTP detection
           </p>
         </header>
 
-        <main className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/10">
+        <main className="bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
           {/* Email Generator Section */}
           <div className="mb-6">
-            <div className="bg-gray-900/70 rounded-xl p-4 border border-gray-700">
+            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
               <div className="relative mb-4">
                 <input
                   type="text"
                   value={loading ? "⚡ Generating new email address..." : (address || "Click 'Generate' to create temporary email")}
                   readOnly
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-4 text-white font-mono text-center text-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-4 text-gray-900 font-mono text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all shadow-sm"
                 />
                 {loading && (
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
+                    <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
                   </div>
                 )}
               </div>
@@ -440,7 +440,7 @@ export default function App(): React.ReactNode {
                 <button
                   onClick={() => copyToClipboard(address, "📧 Email address copied!")}
                   disabled={!address || loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 disabled:bg-gray-100 disabled:opacity-50 text-gray-700 rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
                 >
                   <Copy className="w-5 h-5" />
                   Copy Email
@@ -449,7 +449,7 @@ export default function App(): React.ReactNode {
                 <button
                   onClick={generateNewEmail}
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-cyan-500/20 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg font-bold transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/30 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
                   {loading ? "Creating..." : "Generate New Email"}
@@ -458,7 +458,7 @@ export default function App(): React.ReactNode {
                 <button
                   onClick={refreshMessages}
                   disabled={!address || loading || !accountCredentials}
-                  className="flex items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:opacity-50 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 disabled:bg-gray-100 disabled:opacity-50 text-gray-700 rounded-lg font-medium transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer shadow-sm"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Refresh
@@ -470,20 +470,22 @@ export default function App(): React.ReactNode {
           {/* OTP Detection Section */}
           {otp && (
             <div className="mb-6 animate-fade-in-down">
-              <div className="bg-green-900/50 border border-green-500/30 rounded-xl p-4">
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-5 shadow-lg">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
-                    <Shield className="w-7 h-7 text-green-400" />
+                    <div className="bg-green-500 rounded-full p-2">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
                     <div>
-                      <p className="text-green-300 font-semibold">🔐 Verification Code Detected</p>
-                      <p className="text-2xl font-mono font-bold text-white tracking-widest">{otp}</p>
+                      <p className="text-green-700 font-semibold text-sm mb-1">🔐 Verification Code Detected</p>
+                      <p className="text-3xl font-mono font-bold text-gray-900 tracking-widest">{otp}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => copyToClipboard(otp, "🔐 OTP code copied!")}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md hover:shadow-lg"
                   >
-                    <Copy className="w-4 h-4" />
+                    <Copy className="w-5 h-5" />
                     Copy Code
                   </button>
                 </div>
@@ -496,11 +498,11 @@ export default function App(): React.ReactNode {
             <div className="mb-4">
               <div className={`flex items-center gap-2 text-sm p-2 rounded-lg ${
                 isListening
-                  ? 'bg-green-900/30 text-green-400 border border-green-500/30'
-                  : 'bg-yellow-900/30 text-yellow-400 border border-yellow-500/30'
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
               }`}>
                 <div className={`w-2 h-2 rounded-full ${
-                  isListening ? 'bg-green-400 animate-pulse' : 'bg-yellow-400'
+                  isListening ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
                 }`}></div>
                 <span>
                   {isListening ? '🟢 Live - Checking for emails every 1 second' : '🟡 Connected - Click refresh to check for emails'}
@@ -511,38 +513,38 @@ export default function App(): React.ReactNode {
 
           {/* Inbox Section */}
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-              <Mail className="w-6 h-6 text-cyan-400" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <Mail className="w-6 h-6 text-blue-600" />
               Inbox
-              {isListening && messages.length === 0 && <Loader2 className="w-5 h-5 animate-spin" />}
+              {isListening && messages.length === 0 && <Loader2 className="w-5 h-5 animate-spin text-blue-600" />}
               {messages.length > 0 && (
-                <span className="bg-cyan-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
                   {messages.length}
                 </span>
               )}
             </h3>
 
-            <div className="bg-gray-900/50 rounded-lg border border-gray-700 min-h-64 max-h-96 overflow-y-auto p-2">
+            <div className="bg-gray-50 rounded-lg border border-gray-200 min-h-64 max-h-96 overflow-y-auto p-2">
               {messages.length > 0 ? (
                 <div className="space-y-3">
                   {messages.map((msg, index) => (
-                    <article key={msg.id || index} className="bg-gray-800/60 rounded-lg p-4 border border-gray-700 hover:border-cyan-500/50 transition-all animate-fade-in-down">
+                    <article key={msg.id || index} className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 transition-all animate-fade-in-down shadow-sm">
                       <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
-                        <p className="font-semibold text-white truncate">
+                        <p className="font-semibold text-gray-900 truncate">
                           📨 From: {msg.from?.address || msg.from?.name || 'Unknown sender'}
                         </p>
-                        <div className="flex items-center gap-2 text-gray-400 text-xs">
+                        <div className="flex items-center gap-2 text-gray-500 text-xs">
                           <Clock className="w-3 h-3" />
                           <time dateTime={msg.createdAt}>
                             {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'Just now'}
                           </time>
                         </div>
                       </div>
-                      <h4 className="text-cyan-300 font-medium mb-2">
+                      <h4 className="text-blue-600 font-medium mb-2">
                         📄 {msg.subject || 'No subject'}
                       </h4>
-                      <div className="bg-gray-900/50 rounded p-3 border border-gray-700/50">
-                        <p className="text-gray-300 text-sm whitespace-pre-wrap">
+                      <div className="bg-gray-50 rounded p-3 border border-gray-200">
+                        <p className="text-gray-600 text-sm whitespace-pre-wrap">
                           {msg.text || msg.intro || 'No content available'}
                         </p>
                       </div>
@@ -550,7 +552,7 @@ export default function App(): React.ReactNode {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500 text-center">
+                <div className="flex flex-col items-center justify-center h-64 text-gray-400 text-center">
                   <Mail className="w-16 h-16 mb-4 opacity-30" />
                   <p className="text-lg font-medium">
                     {isListening ? "📡 Waiting for new messages..." : "📪 Your inbox is empty"}

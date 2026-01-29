@@ -1,14 +1,31 @@
-"use client"
+"use client";
 
+import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Main from "../components/Main";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/ui/Navbar1";
 import Testimonials from "../components/Testimonial";
+import TempMailCoTestimonials from "@/components/MailReviews";
+
+declare global {
+  interface Window {
+    adsbygoogle: unknown[];
+  }
+}
 
 export default function Home() {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (err) {
+      console.error("AdSense error:", err);
+    }
+  }, []);
+
   return (
     <>
-      {/* Advanced Schema.org structured data for better SERP features */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -16,172 +33,171 @@ export default function Home() {
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "WebApplication",
-                "@id": "https://tempmailco.com/#webapp",
-                "name": "TempMailCo - Temporary Email Generator",
-                "alternateName": ["Temp Mail", "Disposable Email", "10 Minute Mail", "TempMail Co"],
-                "description": "Free temporary email generator by TempMailCo that creates disposable email addresses for privacy protection and spam prevention.",
-                "url": "https://tempmailco.com",
-                "applicationCategory": "Email Utility",
-                "operatingSystem": ["Windows", "macOS", "Linux", "iOS", "Android"],
-                "browserRequirements": "Requires JavaScript",
-                "permissions": "No permissions required",
-                "offers": {
-                  "@type": "Offer",
-                  "price": "0",
-                  "priceCurrency": "USD",
-                  "availability": "https://schema.org/InStock"
+                "@type": "WebPage",
+                "@id": "https://tempmailco.com/#webpage",
+                url: "https://tempmailco.com",
+                name: "TempMailCo - Free Temporary Email Generator",
+                description:
+                  "Generate free temporary email addresses instantly with TempMailCo. Protect your privacy and avoid spam with our disposable email service.",
+                datePublished: "2024-01-01T00:00:00+00:00",
+                dateModified: "2025-08-06T00:00:00+00:00",
+                isPartOf: {
+                  "@id": "https://tempmailco.com/#website",
                 },
-                "featureList": [
-                  "Instant email generation",
-                  "Auto-expiring emails", 
-                  "No registration required",
-                  "Spam protection",
-                  "Multiple domain options",
-                  "Email forwarding"
-                ],
-                "provider": {
-                  "@type": "Organization",
-                  "name": "TempMailCo",
-                  "url": "https://tempmailco.com"
-                }
-              },
-              {
-                "@type": "Organization",
-                "@id": "https://tempmailco.com/#organization",
-                "name": "TempMailCo",
-                "url": "https://tempmailco.com",
-                "description": "Leading provider of temporary email services for privacy protection and spam prevention.",
-                "foundingDate": "2024",
-                "knowsAbout": [
-                  "Temporary Email",
-                  "Email Privacy",
-                  "Spam Protection",
-                  "Disposable Email Addresses"
-                ],
-                "sameAs": []
+                about: {
+                  "@id": "https://tempmailco.com/#organization",
+                },
+                primaryImageOfPage: {
+                  "@type": "ImageObject",
+                  url: "https://tempmailco.com/og-image.jpg",
+                  width: 1200,
+                  height: 630,
+                },
+                breadcrumb: {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Home",
+                      item: "https://tempmailco.com",
+                    },
+                  ],
+                },
               },
               {
                 "@type": "FAQPage",
-                "mainEntity": [
+                mainEntity: [
                   {
                     "@type": "Question",
-                    "name": "What is a temporary email address?",
-                    "acceptedAnswer": {
+                    name: "What is TempMailCo and how does it work?",
+                    acceptedAnswer: {
                       "@type": "Answer",
-                      "text": "A temporary email address is a disposable email that automatically expires after a set time period, typically 10 minutes to 1 hour, protecting your real email from spam."
-                    }
-                  },
-                  {
-                    "@type": "Question", 
-                    "name": "Is TempMailCo free?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "Yes, TempMailCo provides completely free temporary email addresses with no registration required and no hidden fees."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "How long do TempMailCo email addresses last?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "TempMailCo email addresses are automatically deleted after a specified time period, typically ranging from 10 minutes to several hours, depending on your selected settings."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "Can I use TempMailCo for account verification?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "Yes, TempMailCo temporary emails can be used for account verification, newsletter subscriptions, and any service that requires email confirmation while keeping your real email private."
-                    }
-                  }
-                ]
-              },
-              {
-                "@type": "WebPage",
-                "@id": "https://tempmailco.com/#webpage",
-                "url": "https://tempmailco.com",
-                "name": "TempMailCo - Free Temporary Email Generator",
-                "description": "Generate free temporary email addresses instantly with TempMailCo. Protect your privacy and avoid spam with our disposable email service.",
-                "isPartOf": {
-                  "@id": "https://tempmailco.com/#website"
-                },
-                "about": {
-                  "@id": "https://tempmailco.com/#organization"
-                },
-                "primaryImageOfPage": {
-                  "@type": "ImageObject",
-                  "url": "https://tempmailco.com/og-image.jpg"
-                }
-              },
-              {
-                "@type": "WebSite",
-                "@id": "https://tempmailco.com/#website",
-                "url": "https://tempmailco.com",
-                "name": "TempMailCo",
-                "description": "Free temporary email generator for privacy protection",
-                "publisher": {
-                  "@id": "https://tempmailco.com/#organization"
-                },
-                "potentialAction": [
-                  {
-                    "@type": "SearchAction",
-                    "target": {
-                      "@type": "EntryPoint",
-                      "urlTemplate": "https://tempmailco.com/search?q={search_term_string}"
+                      text: "TempMailCo is a free temporary email service that generates disposable email addresses that automatically expire after a set time period. Simply visit our website, get an instant temporary email address, and use it for registrations, verifications, or any service where you want to protect your real email from spam.",
                     },
-                    "query-input": "required name=search_term_string"
-                  }
-                ]
-              }
-            ]
-          })
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Is TempMailCo completely free to use?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Yes, TempMailCo provides completely free temporary email addresses with no registration required, no hidden fees, and no limitations on usage. Our service is supported by ads to keep it free for everyone.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "How long do TempMailCo email addresses last?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "TempMailCo email addresses are automatically deleted after 10 minutes to several hours, depending on your selected settings. You can extend the time or refresh to get a new address anytime.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Can I use TempMailCo for account verification and sign-ups?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Absolutely! TempMailCo temporary emails work perfectly for account verification, newsletter subscriptions, downloading files, testing services, and any situation where you need an email address but want to protect your privacy.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Is TempMailCo secure and private?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Yes, TempMailCo prioritizes your privacy and security. We don't store personal information, emails are automatically deleted, and we use secure connections. However, remember that temporary emails should not be used for sensitive account recoveries or important services.",
+                    },
+                  },
+                ],
+              },
+              {
+                "@type": "HowTo",
+                name: "How to Use TempMailCo Free Temporary Email Generator",
+                description:
+                  "Step-by-step guide to generate and use temporary email addresses with TempMailCo",
+                image: "https://tempmailco.com/how-to-guide.jpg",
+                totalTime: "PT2M",
+                estimatedCost: {
+                  "@type": "MonetaryAmount",
+                  currency: "USD",
+                  value: "0",
+                },
+                step: [
+                  {
+                    "@type": "HowToStep",
+                    name: "Visit TempMailCo Website",
+                    text: "Go to tempmailco.com in your web browser",
+                    url: "https://tempmailco.com",
+                  },
+                  {
+                    "@type": "HowToStep",
+                    name: "Get Your Temporary Email",
+                    text: "A random temporary email address will be automatically generated for you upon visiting the site",
+                  },
+                  {
+                    "@type": "HowToStep",
+                    name: "Copy and Use",
+                    text: "Copy the temporary email address and use it for registrations, verifications, or any service requiring an email",
+                  },
+                  {
+                    "@type": "HowToStep",
+                    name: "Receive Emails",
+                    text: "Check back on TempMailCo to view any emails received in your temporary inbox",
+                  },
+                ],
+              },
+            ],
+          }),
         }}
       />
-      
+
       <Navbar />
-      
-      {/* Top Ad - After Navigation */}
-      <div className="w-full flex justify-center py-4">
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-1125717518172617"
-          data-ad-slot="5294812795"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
+
+      {/* Main content with sidebar ads */}
+      <div className="max-w-[1400px] mx-auto px-4">
+        <div className="flex gap-4 py-4">
+          {/* Left Sidebar Ad */}
+          <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block", width: "160px", height: "600px" }}
+              data-ad-client="ca-pub-1125717518172617"
+              data-ad-slot="5294812795"
+            />
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1 min-w-0">
+            <Main />
+          </main>
+
+          {/* Right Sidebar Ad */}
+          <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block", width: "160px", height: "600px" }}
+              data-ad-client="ca-pub-1125717518172617"
+              data-ad-slot="7258631154"
+            />
+          </aside>
+        </div>
       </div>
-      
-      <Main />
-      
-      {/* Middle Ad - Between Main and Testimonials */}
-      <div className="w-full flex justify-center py-4">
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-1125717518172617"
-          data-ad-slot="7258631154"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-      
+
       <Testimonials />
-      
-      {/* Bottom Ad - Before Footer */}
-      <div className="w-full flex justify-center py-4">
+
+      <TempMailCoTestimonials/>
+
+      {/* Horizontal Ad below Testimonials */}
+      <section className="w-full flex justify-center py-4 bg-gray-50" aria-label="Advertisement">
         <ins
           className="adsbygoogle"
-          style={{ display: "block" }}
+          style={{ display: "block", minWidth: "320px", maxWidth: "728px", height: "90px" }}
           data-ad-client="ca-pub-1125717518172617"
           data-ad-slot="9296238185"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-      
+          data-ad-format="horizontal"
+        />
+      </section>
+
       <Footer />
     </>
   );
