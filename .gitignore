@@ -32,8 +32,25 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# test and debug files
+test_*.js
+debug_*.js
+*.txt
+!README.txt
+probe_*.js
+check_*.js
+verify_*.js
+working_*.js
+exhaustive_*.js
+final_*.js
+hex_*.js
+sanity_*.js
+detect_*.js
+proxy_server.js
+
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel

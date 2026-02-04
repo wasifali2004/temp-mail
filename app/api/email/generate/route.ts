@@ -3,9 +3,13 @@ import https from 'https';
 
 export const dynamic = 'force-dynamic';
 
-const API_KEY = 'be3ef3ef5dmsh1afb1f18f61cac0p180c25jsn388a29d41152';
-const AUTH_TOKEN = 'FD3789BB-7DA7-3A83-6FA4-329729667B9B';
-const HOST = 'tempmail-so.p.rapidapi.com';
+const API_KEY = process.env.RAPIDAPI_KEY;
+const AUTH_TOKEN = process.env.AUTH_TOKEN;
+const HOST = process.env.RAPIDAPI_HOST || 'tempmail-so.p.rapidapi.com';
+
+if (!API_KEY || !AUTH_TOKEN) {
+    throw new Error('Missing required environment variables: RAPIDAPI_KEY or AUTH_TOKEN');
+}
 
 function makeRequest(path: string, method: string = 'GET', body: any = null): Promise<any> {
     return new Promise((resolve, reject) => {

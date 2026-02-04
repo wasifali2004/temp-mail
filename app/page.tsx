@@ -14,15 +14,19 @@ declare global {
 }
 
 export default function Home() {
+  const adsenseId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID;
+
   useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error("AdSense error:", err);
+    if (adsenseId) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error("AdSense error:", err);
+      }
     }
-  }, []);
+  }, [adsenseId]);
 
   return (
     <>
@@ -157,14 +161,16 @@ export default function Home() {
       <div className="max-w-[1400px] mx-auto px-4">
         <div className="flex gap-4 py-4">
           {/* Left Sidebar Ad */}
-          <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block", width: "160px", height: "600px" }}
-              data-ad-client="ca-pub-1125717518172617"
-              data-ad-slot="5294812795"
-            />
-          </aside>
+          {adsenseId && (
+            <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
+              <ins
+                className="adsbygoogle"
+                style={{ display: "block", width: "160px", height: "600px" }}
+                data-ad-client={adsenseId}
+                data-ad-slot="5294812795"
+              />
+            </aside>
+          )}
 
           {/* Main Content */}
           <main className="flex-1 min-w-0">
@@ -172,14 +178,16 @@ export default function Home() {
           </main>
 
           {/* Right Sidebar Ad */}
-          <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block", width: "160px", height: "600px" }}
-              data-ad-client="ca-pub-1125717518172617"
-              data-ad-slot="7258631154"
-            />
-          </aside>
+          {adsenseId && (
+            <aside className="hidden lg:block w-[160px] flex-shrink-0 sticky top-20 self-start">
+              <ins
+                className="adsbygoogle"
+                style={{ display: "block", width: "160px", height: "600px" }}
+                data-ad-client={adsenseId}
+                data-ad-slot="7258631154"
+              />
+            </aside>
+          )}
         </div>
       </div>
 
@@ -188,15 +196,17 @@ export default function Home() {
       <TempMailCoTestimonials/>
 
       {/* Horizontal Ad below Testimonials */}
-      <section className="w-full flex justify-center py-4 bg-gray-50" aria-label="Advertisement">
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block", minWidth: "320px", maxWidth: "728px", height: "90px" }}
-          data-ad-client="ca-pub-1125717518172617"
-          data-ad-slot="9296238185"
-          data-ad-format="horizontal"
-        />
-      </section>
+      {adsenseId && (
+        <section className="w-full flex justify-center py-4 bg-gray-50" aria-label="Advertisement">
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block", minWidth: "320px", maxWidth: "728px", height: "90px" }}
+            data-ad-client={adsenseId}
+            data-ad-slot="9296238185"
+            data-ad-format="horizontal"
+          />
+        </section>
+      )}
 
       <Footer />
     </>

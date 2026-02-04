@@ -24,27 +24,38 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const adsenseId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID;
+
   return (
     <html lang="en">
       <head>
         {/* Google Analytics */}
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-76C99GDV6W" />
-        <Script id="google-analytics">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-76C99GDV6W');
-          `}
-        </Script>
+        {gaId && (
+          <>
+            <Script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <Script id="google-analytics">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}');
+              `}
+            </Script>
+          </>
+        )}
 
         {/* Google AdSense */}
-        <meta name="google-adsense-account" content="ca-pub-1125717518172617" />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1125717518172617"
-          crossOrigin="anonymous"
-        />
+        {adsenseId && (
+          <>
+            <meta name="google-adsense-account" content={adsenseId} />
+            <Script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
+              crossOrigin="anonymous"
+            />
+          </>
+        )}
 
         {/* Favicon */}
         <link rel="icon" href="/logo3.png" />
