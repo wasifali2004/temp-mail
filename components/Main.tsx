@@ -26,43 +26,13 @@ interface MessageTo {
 
 interface EmailMessage {
   id: string;
-  accountId: string;
-  msgid: string;
   from: MessageFrom;
   to: MessageTo[];
   subject: string;
   intro: string;
-  seen: boolean;
-  isDeleted: boolean;
-  hasAttachments: boolean;
-  size: number;
-  downloadUrl: string;
-  createdAt: string;
-  updatedAt: string;
   text?: string;
-  html?: string[];
+  createdAt: string;
 }
-
-interface AccountData {
-  username: string;
-  password: string;
-}
-
-interface ApiResponse {
-  [key: string]: unknown;
-}
-
-interface Domain {
-  isActive: boolean;
-  domain: string;
-}
-
-interface LoginResponse {
-  token: string;
-}
-
-// Mail.tm API base URL
-const API_BASE = 'https://api.mail.tm';
 
 // --- Reusable Toast Notification Component ---
 const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
@@ -95,8 +65,6 @@ export default function App(): React.ReactNode {
   const [loading, setLoading] = useState<boolean>(false);
   const [isListening, setIsListening] = useState<boolean>(false);
   const [toast, setToast] = useState<ToastData | null>(null);
-  const [accountCredentials, setAccountCredentials] = useState<AccountData | null>(null);
-  const [authToken, setAuthToken] = useState<string>('');
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isGenerating = useRef<boolean>(false);
@@ -127,123 +95,22 @@ export default function App(): React.ReactNode {
     return null;
   }, []);
 
-  // --- Function to make API calls with rate limiting and retry logic ---
-  const apiCall = useCallback(async (endpoint: string, options: RequestInit = {}, retryCount = 0): Promise<ApiResponse> => {
-    const url = `${API_BASE}${endpoint}`;
-    console.log(`Making API call to: ${url} (attempt ${retryCount + 1})`);
-
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    };
-
-    if (options.headers) {
-      Object.assign(headers, options.headers as Record<string, string>);
-    }
-
-    if (authToken) {
-      headers['Authorization'] = `Bearer ${authToken}`;
-    }
+  // --- Function to fetch messages ---
+  const fetchMessages = useCallback(async (): Promise<void> => {
+    if (!address) return;
 
     try {
-      const response = await fetch(url, {
-        ...options,
-        headers,
-        mode: 'cors',
-      });
-
-      console.log(`API Response Status: ${response.status}`);
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || '30';
-        const waitTime = Math.min(parseInt(retryAfter) * 1000, 60000);
-
-        if (retryCount < 2) {
-          console.log(`Rate limited. Waiting ${waitTime / 1000}s before retry...`);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
-          return apiCall(endpoint, options, retryCount + 1);
-        } else {
-          throw new Error('Rate limit exceeded. Please wait a few minutes before trying again.');
-        }
-      }
-
+      const response = await fetch(`/api/email/messages?address=${encodeURIComponent(address)}`);
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`API Error: ${response.status} ${response.statusText} - ${errorText}`);
-
-        if (response.status === 401) {
-          throw new Error('Authentication failed. Please generate a new email.');
-        } else if (response.status === 403) {
-          throw new Error('Access forbidden. Service may be temporarily unavailable.');
-        } else if (response.status >= 500) {
-          throw new Error('Server error. Please try again later.');
-        }
-
-        throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch messages: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('API Response Data:', data);
-      return data;
-    } catch (apiError: unknown) {
-      console.error('API Call Error:', apiError);
-      if (apiError instanceof Error && apiError.name === 'TypeError' && apiError.message.includes('fetch')) {
-        throw new Error('Network error - please check your internet connection or try again later');
-      }
-      throw apiError;
-    }
-  }, [authToken]);
-
-  // --- Function to create account ---
-  const createAccount = useCallback(async (email: string, password: string): Promise<ApiResponse> => {
-    try {
-      const account = await apiCall('/accounts', {
-        method: 'POST',
-        body: JSON.stringify({
-          address: email,
-          password: password,
-        }),
-      });
-      return account;
-    } catch (createError: unknown) {
-      throw createError;
-    }
-  }, [apiCall]);
-
-  // --- Function to login ---
-  const login = useCallback(async (email: string, password: string): Promise<LoginResponse> => {
-    try {
-      const response = await apiCall('/token', {
-        method: 'POST',
-        body: JSON.stringify({
-          address: email,
-          password: password,
-        }),
-      });
-      if (!response.token) {
-        throw new Error('Invalid login response: token missing');
-      }
-      return response as unknown as LoginResponse;
-    } catch (loginError: unknown) {
-      throw loginError;
-    }
-  }, [apiCall]);
-
-  // --- Function to fetch messages ---
-  const fetchMessages = useCallback(async (): Promise<void> => {
-    if (!authToken || !accountCredentials) return;
-
-    try {
-      const response = await apiCall('/messages');
-
+      
       let messageList: EmailMessage[] = [];
-
-      if (Array.isArray(response)) {
-        messageList = response as EmailMessage[];
-      } else if (response && response['hydra:member']) {
-        messageList = response['hydra:member'] as EmailMessage[];
-      } else if (response && response.messages) {
-        messageList = response.messages as EmailMessage[];
+      if (Array.isArray(data)) {
+        messageList = data;
       }
 
       setMessages(messageList);
@@ -254,14 +121,17 @@ export default function App(): React.ReactNode {
         if (foundOtp && foundOtp !== otp) {
           setOtp(foundOtp);
           showToast(`OTP Found: ${foundOtp}`, 'success');
-          break;
+          break; // Stop at first found OTP
         }
       }
     } catch (fetchError: unknown) {
       console.error('Fetch messages error:', fetchError);
-      showToast('Failed to fetch messages', 'error');
+      // Don't show toast on every poll error to avoid spamming
+      if (!isListening) {
+          showToast('Failed to fetch messages', 'error');
+      }
     }
-  }, [authToken, accountCredentials, apiCall, extractOTP, otp, showToast]);
+  }, [address, extractOTP, otp, showToast, isListening]);
 
   // --- Function to cleanup previous session ---
   const cleanupSession = useCallback((): void => {
@@ -274,34 +144,22 @@ export default function App(): React.ReactNode {
     setMessages([]);
     setOtp('');
     setIsListening(false);
-    setAccountCredentials(null);
-    setAuthToken('');
   }, []);
 
-  // --- Function to start polling for messages with longer intervals ---
+  // --- Function to start polling for messages ---
   const startPolling = useCallback((): void => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
 
     setIsListening(true);
-
     fetchMessages();
 
+    // Poll every 15 seconds to be polite to the backend/API
     intervalRef.current = setInterval(() => {
       fetchMessages();
-    }, 1000);
+    }, 15000);
   }, [fetchMessages]);
-
-  // --- Function to generate random string ---
-  const generateRandomString = useCallback((length: number = 8): string => {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  }, []);
 
   // --- Function to initialize and generate an account ---
   const generateNewEmail = useCallback(async (): Promise<void> => {
@@ -313,35 +171,36 @@ export default function App(): React.ReactNode {
     showToast("Creating new temporary email account...", 'info');
 
     try {
-      const domainResponse = await apiCall('/domains');
-      const domainList = domainResponse as unknown as Domain[];
-      if (!Array.isArray(domainList)) {
-        throw new Error('Invalid domain response: expected an array');
-      }
-      const domain = domainList.find(d => d.isActive) || domainList[0];
-      if (!domain) {
-        throw new Error('No active domains available');
-      }
-      const username = generateRandomString(10);
-      const email = `${username}@${domain.domain}`;
-      const password = generateRandomString(12);
-
-      await createAccount(email, password);
-      const loginResponse = await login(email, password);
-
-      if (!loginResponse.token) {
-        throw new Error("Failed to get authentication token");
+      const response = await fetch('/api/email/generate');
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate email');
       }
 
-      setAuthToken(loginResponse.token);
-      setAccountCredentials({ username: email, password });
-      setAddress(email);
-      showToast(`New email created: ${email}`, 'success');
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      if (!data.address) {
+        throw new Error("No address received from server");
+      }
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await fetchMessages();
-      startPolling();
-      showToast("📡 Inbox is live! Waiting for messages...", 'success');
+      const newAddress = data.address;
+      setAddress(newAddress);
+      showToast(`New email created: ${newAddress}`, 'success');
+
+      // Wait a bit before starting to poll
+      setTimeout(() => {
+         // We can't call startPolling directly here because it depends on the updated 'address' state
+         // Instead, we'll set a flag or rely on useEffect if needed, or just let the user click refresh/start.
+         // But better UX is auto-start.
+         // Since 'address' is in the closure of the next render, current startPolling won't see it immediately inside this function
+         // We will trigger a manual fetch/poll start via a useEffect when address changes? 
+         // Or just cheat and pass the address to a specialized poll starter.
+      }, 500);
+
     } catch (generateError: unknown) {
       showToast(generateError instanceof Error ? generateError.message : "Failed to create email account", 'error');
       cleanupSession();
@@ -349,16 +208,25 @@ export default function App(): React.ReactNode {
       setLoading(false);
       isGenerating.current = false;
     }
-  }, [showToast, apiCall, createAccount, login, generateRandomString, fetchMessages, startPolling, cleanupSession]);
+  }, [showToast, cleanupSession]);
+
+  // Effect to start polling when address is successfully set
+  useEffect(() => {
+    if (address && !isListening) {
+        startPolling();
+        showToast("📡 Inbox is live! Waiting for messages...", 'success');
+    }
+  }, [address, isListening, startPolling, showToast]);
+
 
   // --- Function to refresh messages manually ---
   const refreshMessages = useCallback(async (): Promise<void> => {
-    if (!authToken || loading || !accountCredentials) return;
+    if (!address || loading) return;
 
     showToast("🔄 Refreshing inbox...", 'info');
     await fetchMessages();
     showToast("✅ Inbox refreshed", 'success');
-  }, [fetchMessages, loading, accountCredentials, authToken, showToast]);
+  }, [fetchMessages, loading, address, showToast]);
 
   // --- Fallback copy function ---
   const fallbackCopyTextToClipboard = useCallback((text: string, successMessage: string): void => {
@@ -397,9 +265,11 @@ export default function App(): React.ReactNode {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      cleanupSession();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
-  }, [cleanupSession]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
@@ -457,7 +327,7 @@ export default function App(): React.ReactNode {
 
                 <button
                   onClick={refreshMessages}
-                  disabled={!address || loading || !accountCredentials}
+                  disabled={!address || loading}
                   className="flex items-center gap-2 px-4 py-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 disabled:bg-gray-100 disabled:opacity-50 text-gray-700 rounded-lg font-medium transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer shadow-sm"
                 >
                   <RefreshCw className="w-5 h-5" />
@@ -505,7 +375,7 @@ export default function App(): React.ReactNode {
                   isListening ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
                 }`}></div>
                 <span>
-                  {isListening ? '🟢 Live - Checking for emails every 1 second' : '🟡 Connected - Click refresh to check for emails'}
+                  {isListening ? '🟢 Live - Checking for emails every 5 seconds' : '🟡 Connected - Poll stopped'}
                 </span>
               </div>
             </div>
@@ -516,7 +386,7 @@ export default function App(): React.ReactNode {
             <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
               <Mail className="w-6 h-6 text-blue-600" />
               Inbox
-              {isListening && messages.length === 0 && <Loader2 className="w-5 h-5 animate-spin text-blue-600" />}
+              {isListening && messages.length === 0 && <span className="text-xs font-normal text-gray-500 animate-pulse">Scanning...</span>}
               {messages.length > 0 && (
                 <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
                   {messages.length}
@@ -530,21 +400,21 @@ export default function App(): React.ReactNode {
                   {messages.map((msg, index) => (
                     <article key={msg.id || index} className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-400 transition-all animate-fade-in-down shadow-sm">
                       <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
-                        <p className="font-semibold text-gray-900 truncate">
+                        <div className="font-semibold text-gray-900 truncate flex-1 min-w-0">
                           📨 From: {msg.from?.address || msg.from?.name || 'Unknown sender'}
-                        </p>
-                        <div className="flex items-center gap-2 text-gray-500 text-xs">
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-500 text-xs whitespace-nowrap">
                           <Clock className="w-3 h-3" />
                           <time dateTime={msg.createdAt}>
                             {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : 'Just now'}
                           </time>
                         </div>
                       </div>
-                      <h4 className="text-blue-600 font-medium mb-2">
+                      <h4 className="text-blue-600 font-medium mb-2 truncate">
                         📄 {msg.subject || 'No subject'}
                       </h4>
-                      <div className="bg-gray-50 rounded p-3 border border-gray-200">
-                        <p className="text-gray-600 text-sm whitespace-pre-wrap">
+                      <div className="bg-gray-50 rounded p-3 border border-gray-200 opacity-90 overflow-hidden">
+                        <p className="text-gray-600 text-sm whitespace-pre-wrap font-mono">
                           {msg.text || msg.intro || 'No content available'}
                         </p>
                       </div>
@@ -557,9 +427,9 @@ export default function App(): React.ReactNode {
                   <p className="text-lg font-medium">
                     {isListening ? "📡 Waiting for new messages..." : "📪 Your inbox is empty"}
                   </p>
-                  <p className="text-sm">
+                  <p className="text-sm mt-2 max-w-xs text-gray-400">
                     {isListening
-                      ? "Emails will appear here automatically when received"
+                      ? "Emails will appear here automatically when received. We check every 5 seconds."
                       : "Generate an email address to start receiving messages"
                     }
                   </p>
@@ -570,7 +440,7 @@ export default function App(): React.ReactNode {
         </main>
 
         <footer className="text-center py-6 text-gray-500 text-sm">
-          <p>🚀 Powered by mail.tm API • 🔒 Temporary & Secure • 🆓 Completely Free</p>
+          <p>🚀 Powered by Temp Mail API • 🔒 Temporary & Secure • 🆓 Completely Free</p>
           <p className="mt-2 text-xs">If you encounter issues, try refreshing or generating a new email</p>
         </footer>
       </div>

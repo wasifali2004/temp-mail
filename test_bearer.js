@@ -1,15 +1,12 @@
-import { NextResponse } from 'next/server';
-import https from 'https';
-
-export const dynamic = 'force-dynamic';
+const https = require('https');
 
 const API_KEY = 'be3ef3ef5dmsh1afb1f18f61cac0p180c25jsn388a29d41152';
 const AUTH_TOKEN = 'FD3789BB-7DA7-3A83-6FA4-329729667B9B';
 const HOST = 'tempmail-so.p.rapidapi.com';
 
-function makeRequest(path: string, method: string = 'GET', body: any = null): Promise<any> {
+function makeRequest(path, method = 'GET', body = null) {
     return new Promise((resolve, reject) => {
-        const headers: any = {
+        const headers = {
             'X-RapidAPI-Key': API_KEY,
             'X-RapidAPI-Host': HOST,
             'Authorization': `Bearer ${AUTH_TOKEN}`
@@ -26,20 +23,27 @@ function makeRequest(path: string, method: string = 'GET', body: any = null): Pr
             headers: headers
         };
 
+        console.log(`\n${method} ${path}`);
+        console.log('Headers:', JSON.stringify(headers, null, 2));
+
         const req = https.request(options, (res) => {
             let data = '';
             res.on('data', chunk => data += chunk);
             res.on('end', () => {
+                console.log(`Status: ${res.statusCode}`);
                 try {
                     const json = JSON.parse(data);
+                    console.log('Response:', JSON.stringify(json, null, 2));
                     resolve({ status: res.statusCode, data: json });
                 } catch (e) {
+                    console.log('Raw Response:', data);
                     resolve({ status: res.statusCode, raw: data });
                 }
             });
         });
         
         req.on('error', (e) => {
+            console.error('Error:', e);
             reject(e);
         });
 
@@ -50,42 +54,41 @@ function makeRequest(path: string, method: string = 'GET', body: any = null): Pr
     });
 }
 
-export async function GET() {
+async function testFlow() {
     try {
         // 1. Get Domains
+        console.log('=== STEP 1: Get Domains ===');
         const domainRes = await makeRequest('/domains');
         
-        let domain = 'pixoledge.net'; // Primary fallback
-
-        if (domainRes.status === 200 && domainRes.data && domainRes.data.code === 0 && Array.isArray(domainRes.data.data)) {
-            const domainEntry = domainRes.data.data[0];
-            domain = typeof domainEntry === 'string' ? domainEntry : (domainEntry.domain || domain);
+        if (domainRes.status !== 200 || !domainRes.data || domainRes.data.code !== 0) {
+            console.error('\n❌ Failed to get domains');
+            return;
         }
 
+        const domain = domainRes.data.data[0].domain;
         const name = Math.random().toString(36).substring(2, 10);
         const emailAddress = `${name}@${domain}`;
+        
+        console.log(`\n✓ Selected: ${emailAddress}`);
 
         // 2. Create Inbox
+        console.log('\n=== STEP 2: Create Inbox ===');
         const createRes = await makeRequest('/inboxes', 'POST', {
             name: name,
             domain: domain,
-            lifespan: 1800  // Free plan limit: max 1800 seconds (30 minutes)
+            lifespan: 3600
         });
 
-        // The API returns code: 0 for success
         if (createRes.data && createRes.data.code === 0) {
-            return NextResponse.json({ address: emailAddress });
+            console.log(`\n✅ SUCCESS! Email created: ${emailAddress}`);
         } else {
-            // Even if creation fails, if we have a success code from domains, it might have worked 
-            // or the API is just being difficult. But we'll try to report the error properly.
-            return NextResponse.json({ 
-                error: 'API Error', 
-                message: createRes.data?.message || 'Failed to create mailbox'
-            }, { status: 500 });
+            console.log(`\n❌ Failed to create inbox`);
+            console.log('Response:', createRes.data);
         }
 
     } catch (error) {
-        console.error("Generate Route Error:", error);
-        return NextResponse.json({ error: 'Server Error' }, { status: 500 });
+        console.error("\n❌ Error:", error);
     }
 }
+
+testFlow();
