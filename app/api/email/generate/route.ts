@@ -37,7 +37,7 @@ function makeRequest(path: string, method: string = 'GET', body: any = null): Pr
                 try {
                     const json = JSON.parse(data);
                     resolve({ status: res.statusCode, data: json });
-                } catch (e) {
+                } catch {
                     resolve({ status: res.statusCode, raw: data });
                 }
             });

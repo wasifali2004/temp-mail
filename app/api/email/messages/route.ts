@@ -31,7 +31,7 @@ function makeRequest(path: string, method: string = 'GET'): Promise<any> {
                 try {
                     const json = JSON.parse(data);
                     resolve({ status: res.statusCode, data: json });
-                } catch (e) {
+                } catch {
                     resolve({ status: res.statusCode, raw: data });
                 }
             });
